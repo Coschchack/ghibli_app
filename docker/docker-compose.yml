@@ -1,0 +1,47 @@
+version: '3.8'
+
+volumes:
+  django_vol:
+    driver:
+      local
+
+x-common:
+  &common
+  build:
+    dockerfile: ./docker/Dockerfile
+    context: ./..
+  volumes:
+    - type: volume
+      source: django_vol
+      target: /ghibli_app
+
+services:
+  web:
+    << : *common
+    ports:
+      - "8000:8000"
+    tty: true
+    command: sh -c "python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+
+  redis:
+    image: redis:6.0.6-buster
+    depends_on:
+      - web
+    restart: on-failure
+    expose:
+      - "6379"
+
+  celery-worker:
+    << : *common
+    depends_on:
+      - web
+      - redis
+    command: celery -A ghibli_app worker -l info
+
+  celery-beat:
+    << : *common
+    depends_on:
+      - web
+      - redis
+      - celery-worker
+    command: celery -A ghibli_app beat -l info
