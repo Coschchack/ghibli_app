@@ -1,15 +1,13 @@
 import requests
-
-from ghibli_api.enums import Urls
+from concurrent import futures
 
 
 class ApiClient:
     @staticmethod
-    def get_all_films_response():
-        all_films_response = requests.get(Urls.FILMS_URL.value)
-        return all_films_response
+    def get(endpoint):
+        return requests.get(endpoint)
 
-    @staticmethod
-    def get_all_people_response():
-        all_films_response = requests.get(Urls.PEOPLE_URL.value)
-        return all_films_response
+    def get_concurrently(self, endpoints):
+        with futures.ThreadPoolExecutor(max_workers=len(endpoints)) as executor:
+            results = executor.map(self.get, endpoints)
+        return [result.json() for result in results]
