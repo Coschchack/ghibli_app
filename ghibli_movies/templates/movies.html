@@ -5,18 +5,8 @@
     <table border="1">
         <thead>
         <tr>
-            <th>Movie title</th>
-            <th>People that appear</th>
+            {{ movies }}
         </tr>
-        </thead>
-        <tbody>
-        {% for map_ in maps_collection %}
-        <tr>
-            <td>{{ map_.movie_title }}</td>
-            <td>{{ map_.people }}</td>
-        </tr>
-        {% endfor %}
-        </tbody>
     </table>
   </body>
 </html>

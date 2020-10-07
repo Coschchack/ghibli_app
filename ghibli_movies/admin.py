@@ -1,3 +1,7 @@
 from django.contrib import admin
 
-# Register your models here.
+from ghibli_movies.models import Movie, Person
+
+
+admin.site.register(Movie)
+admin.site.register(Person)
