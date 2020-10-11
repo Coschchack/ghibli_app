@@ -1,19 +1,10 @@
 version: '3.8'
 
-volumes:
-  django_vol:
-    driver:
-      local
-
 x-common:
   &common
   build:
     dockerfile: ./docker/Dockerfile
     context: ./..
-  volumes:
-    - type: volume
-      source: django_vol
-      target: /ghibli_app
 
 services:
   web:
@@ -23,10 +14,11 @@ services:
     tty: true
     command: sh -c "python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
 
-  redis:
-    image: redis:6.0.6-buster
+  cache:
+    << : *common
     depends_on:
       - web
-    restart: on-failure
+    restart: always
     expose:
-      - "6379"
+      - "11211"
+    command: sh -c "memcached -u nobody -p 11211"
