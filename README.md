@@ -48,7 +48,6 @@ All commands need to be executed from root folder of the repository (main ghibli
     - use HTTPStatus codes from http library instead of ResponseCode Enum class
     - getting people and movies in parallel
     - page/data caching for 60 seconds instead of celery and DB
-        - per-view cache
     - storing peoples differently than in a string
     - maybe make the URLs not primitive strings i.e. create a Url class
 - Dockers:
