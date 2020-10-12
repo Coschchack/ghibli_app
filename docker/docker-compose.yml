@@ -1,21 +1,19 @@
 version: '3.8'
 
-x-common:
-  &common
-  build:
-    dockerfile: ./docker/Dockerfile
-    context: ./..
-
 services:
   web:
-    << : *common
+    build:
+      dockerfile: ./docker/Dockerfile_web
+      context: ./..
     ports:
       - "8000:8000"
     tty: true
     command: sh -c "python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
 
   cache:
-    << : *common
+    build:
+      dockerfile: ./docker/Dockerfile_cache
+      context: ./..
     depends_on:
       - web
     restart: always
