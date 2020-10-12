@@ -29,7 +29,7 @@ All commands need to be executed from root folder of the repository (main ghibli
 3. Open a browser and access the application by `http://localhost:8000/movies/`
 
 ### Stop
-1. To stop and remove: `docker-compose -f docker/docker-compose.yml down --volumes`
+1. To stop and remove: `docker-compose -f docker/docker-compose.yml down`
 
 ### Run tests
 1. Build the needed image(s):
@@ -45,13 +45,8 @@ All commands need to be executed from root folder of the repository (main ghibli
         - some tests with Django test_client
         - Selenium tests (if needed)
 - Refactor:
-    - page/data caching for 60 seconds instead of celery and DB
     - storing peoples differently than in a string
     - maybe make the URLs not primitive strings i.e. create a Url class
 - Dockers:
-    - after starting the application in Docker, we need to wait 60 sec for the database to be filled with Ghibli data. 
-    It's due to the Celery periodic task. Improve this to fill the database when the Django server starts.
     - make them more customizable e.g. allow to change Django settings like DEBUG, ALLOWED_HOSTS etc.
-    - separate database from the web service
-    - reduce the number of needed docker containers for the app
 - Linter - pylint or flake8

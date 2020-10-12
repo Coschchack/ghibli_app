@@ -29,9 +29,13 @@ DEBUG = False
 ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 
-# Celery related params
-BROKER_URL = "redis://redis:6379"
-CELERY_TIMEZONE = 'Europe/Warsaw'
+# Cache related params
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        'LOCATION': 'cache:11211',
+    }
+}
 
 
 # Application definition

@@ -13,7 +13,11 @@
         {% for map_ in maps_collection %}
         <tr>
             <td>{{ map_.movie_title }}</td>
-            <td>{{ map_.people }}</td>
+            <td>
+                {% for person in map_.people %}
+                {{ person }} <br>
+                {% endfor %}
+            </td>
         </tr>
         {% endfor %}
         </tbody>
