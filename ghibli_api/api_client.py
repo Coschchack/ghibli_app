@@ -5,13 +5,15 @@ from aiohttp import ClientSession
 
 
 class ApiClient:
+    SEMAPHORE = asyncio.BoundedSemaphore(10)
+
     @staticmethod
     def get(endpoint):
         return requests.get(endpoint)
 
-    @staticmethod
-    async def async_get(client_session, url_, **kwargs):
-        async with client_session.get(url_, verify_ssl=False, **kwargs) as resp:
+    async def async_get(self, client_session, url_, **kwargs):
+        # Also limit the number of concurrent requests
+        async with self.SEMAPHORE, client_session.get(url_, verify_ssl=False, **kwargs) as resp:
             resp_json = await resp.json()
             return resp_json
 
