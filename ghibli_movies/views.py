@@ -12,6 +12,10 @@ from ghibli_api.api_info_extractor import ApiInfoExtractor
 
 @cache_page(60)
 def movies_list_view(request):
+    # This view could be changed to "async def movies_list_view", and the below line to:
+    # api_responses = await ApiClient().get_concurrently((Urls.FILMS_URL.value, Urls.PEOPLE_URL.value))
+    # This would work, but only after removing cache_page decorator, as cache-layer doesn't support async yet
+    # TODO: Or maybe there is some other way to make it work?
     api_responses = asyncio.run(ApiClient().get_concurrently((Urls.FILMS_URL.value, Urls.PEOPLE_URL.value)))
     maps_collection = ApiInfoExtractor().get_people_to_movie_maps(
         all_films=api_responses[0], all_people=api_responses[1])
