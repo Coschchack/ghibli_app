@@ -36,17 +36,3 @@ All commands need to be executed from root folder of the repository (main ghibli
 `docker-compose -f docker/docker-compose.yml build`
 2. Start the tests e.g. on the web service:
 `docker-compose -f docker/docker-compose.yml run --rm web pytest -v -l tests/`
-
-
-## To Do
-- Tests:
-    - implement `pytest-django` instead of raw pytest as it provides nice features
-    - extend tests to other layers:
-        - some tests with Django test_client
-        - Selenium tests (if needed)
-- Refactor:
-    - storing peoples differently than in a string
-    - maybe make the URLs not primitive strings i.e. create a Url class
-- Dockers:
-    - make them more customizable e.g. allow to change Django settings like DEBUG, ALLOWED_HOSTS etc.
-- Linter - pylint or flake8
