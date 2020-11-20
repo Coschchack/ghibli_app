@@ -1,5 +1,7 @@
+import asyncio
+
 import requests
-from concurrent import futures
+from aiohttp import ClientSession
 
 
 class ApiClient:
@@ -7,7 +9,13 @@ class ApiClient:
     def get(endpoint):
         return requests.get(endpoint)
 
-    def get_concurrently(self, endpoints):
-        with futures.ThreadPoolExecutor(max_workers=len(endpoints)) as executor:
-            results = executor.map(self.get, endpoints)
-        return [result.json() for result in results]
+    async def get_concurrently(self, urls):
+        async with ClientSession() as session:
+            coroutines = (self._send_single_concurrent_get(session, url_) for url_ in urls)
+            results = await asyncio.gather(*coroutines)
+        return results
+
+    async def _send_single_concurrent_get(self, client_session, url_, **kwargs):
+        async with client_session.get(url_, verify_ssl=False, **kwargs) as resp:
+            resp_json = await resp.json()
+            return resp_json
